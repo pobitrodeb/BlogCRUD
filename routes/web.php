@@ -6,6 +6,8 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SubCommentController;
+use App\Http\Controllers\ReactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,15 @@ use App\Http\Controllers\CommentController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/blogDetail/{id}', [HomeController::class, 'detailBlog'])->name('blog.detail');
 Route::post('/newComment', [CommentController::class, 'newComment'])->name('newComment');
+
+// Sub Comment
+Route::view('/subComment', [SubCommentController::class, 'index'])->name('subComment');
+Route::post('/newSubComment', [SubCommentController::class, 'create'])->name('newSubComment');
+Route::get('/showSubComment', [SubCommentController::class, 'show'])->name('showSubComment');
+
+//Rection
+Route::post('/newReaction', [ReactionController::class, 'create'])->name('newReaction');
+
 
 //// ADMIN DASHBOARD
 Route::middleware([

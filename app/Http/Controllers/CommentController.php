@@ -28,9 +28,5 @@ class CommentController extends Controller
             'comments' => Comment::all(),
         ]);
     }
-    public function comment()
-    {
 
-        return $this->belongsToMany(Blog::class);
-    }
 }

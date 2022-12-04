@@ -91,9 +91,9 @@
                     <img class="img-fluid mb-4" src="{{asset('/')}}website_asset/img/detail.jpg" alt="Image">
                     <h2 class="mb-3 font-weight-bold">{{$blogPost->title}}</h2>
                     <div class="d-flex">
-                        <p class="mr-3 text-muted"><i class="fa fa-calendar-alt"></i> 01-Jan-2045</p>
-                        <p class="mr-3 text-muted"><i class="fa fa-folder"></i> Web Design</p>
-                        <p class="mr-3 text-muted"><i class="fa fa-comments"></i> 15 Comments</p>
+                        <p class="mr-3 text-muted"><i class="fa fa-calendar-alt"></i>{{$blogPost->created_at->diffForHumans()}}</p>
+                        <p class="mr-3 text-muted"><i class="fa fa-folder"></i> Category </p>
+                        <p class="mr-3 text-muted"><i class="fa fa-comments"></i>{{count($blogPost->comments)}}</p>
                     </div>
                     <p>
                        {!! $blogPost->blog !!}
@@ -119,20 +119,76 @@
                 </div>
                 <div class="col-12 py-4">
                     <h3 class="mb-4 font-weight-bold">3 Comments</h3>
-                  @foreach($allComment as $comment)
-                    <div class="media mb-4">
+                  @foreach($blogPost->comments as $comment)
+                        <div class="media mb-4">
                         <img src="{{asset('/')}}website_asset/img/user.jpg" alt="Image" class="mr-3 mt-1 rounded-circle"
                              style="width:60px;">
                         <div class="media-body">
-                            <h4>{{$comment->name}} <small><i>01 Jan 2045 at 12:00pm</i></small></h4>
+                            <h4>{{$comment->name}} <small><i>{{$comment->updated_at->diffForHumans()}}</i></small></h4>
                             <p>
                                 {{$comment->comment}}
+
                             </p>
-                            <button class="btn btn-sm btn-light">Reply</button>
+                            <button class="btn btn-sm btn-light" onclick="myFunction()">Reply</button>
+
+                            <p id="demo"></p>
+                            <script>
+                                function myFunction() {
+                                    document.getElementById("demo").innerHTML = `
+                                <div class="col-12">
+                                    <form action="{{route('newSubComment')}}" method="post" id="demo">
+                                        @csrf
+
+                                        <input type="hidden" class="form-control" name="blog_id"    value="{{$blogPost->id}}">
+
+                                        <input type="hidden" class="form-control" name="comment_id" value="{{$comment->id}}">
+
+                                        <div class="form-group">
+                                            <label for="name">Name *</label>
+                                            <input type="text" class="form-control" id="name" name="name">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email">Email *</label>
+                                            <input type="email" class="form-control" id="email" name="email">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="message">Comment *</label>
+                                            <textarea id="message" cols="30" rows="5" class="form-control" name="comment"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="submit" value="Reply To {{$comment->name}}" class="btn btn-primary">
+                                        </div>
+                                    </form>
+                            </div>
+                                    `;
+                                }
+                            </script>
+
+
+                            @foreach($comment->subComments as $subcomment)
+                            <div class="media mt-4">
+
+                                <img src="{{asset('/')}}website_asset/img/user.jpg" alt="Image" class="mr-3 mt-1 rounded-circle"
+                                     style="width:60px;">
+                                <div class="media-body">
+                                    <h4>{{$subcomment->name}} <small><i>{{$subcomment->updated_at->diffForHumans()}}</i></small></h4>
+                                    <p>
+                                        {{$subcomment->comment}}
+                                    </p>
+
+                                </div>
+                            </div>
+                            @endforeach
+
+
 
                         </div>
                     </div>
                     @endforeach
+
                 </div>
                 <div class="col-12">
                     <h3 class="mb-4 font-weight-bold">Leave a comment</h3>

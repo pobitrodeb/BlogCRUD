@@ -11,9 +11,19 @@
             <div class="col-md-7">
                 <h3 class="mt-md-4 px-md-3 mb-2 py-2 bg-white font-weight-bold">{{$blog->title}}</h3>
                 <div class="d-flex mb-3">
-                    <small class="mr-2 text-muted"><i class="fa fa-calendar-alt"></i> 01-Jan-2045</small>
-                    <small class="mr-2 text-muted"><i class="fa fa-folder"></i> Web Design</small>
-                    <small class="mr-2 text-muted"><i class="fa fa-comments"></i> 15 Comments</small>
+                    <small class="mr-2 text-muted"><i class="fa fa-calendar-alt"></i> {{$blog->updated_at->diffForHumans()}}</small>
+                    <small class="mr-2 text-muted"><i class="fa fa-folder"></i>  Category</small>
+                    <small class="mr-2 text-muted"><i class="fa fa-comments"></i> {{count($blog->all())}}</small>
+
+                    <form action="{{route('newReaction')}}" id="like" method="post" hidden>
+                        @csrf
+                        <input type="hidden" name="blog_id" value="{{$blog->id}}">
+
+
+                        <input type="submit" value="1" name="submit"/>
+                    </form>
+                    <button onclick="document.getElementById('like').submit();"><i class="fa fa-solid fa-heart"></i></button>
+
                 </div>
                 <p>
                    {!! $blog->blog !!}

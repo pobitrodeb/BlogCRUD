@@ -32,8 +32,6 @@ class Blog extends Model
         self::$blog->save();
     }
 
-
-
     public function comments()
     {
         return $this->hasMany(Comment::class);
